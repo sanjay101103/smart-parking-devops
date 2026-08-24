@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: slot_booking
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./db/slot_booking.sql:/docker-entrypoint-initdb.d/01-slot_booking.sql:ro
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: slot_booking
+      DB_USER: root
+      DB_PASSWORD: rootpass
+    depends_on: [db]
+volumes:
+  dbdata:

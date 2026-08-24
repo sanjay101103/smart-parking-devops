@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata: {name: smart-parking}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: smart-parking, namespace: smart-parking}
+spec:
+  replicas: 2
+  selector: {matchLabels: {app: smart-parking}}
+  template:
+    metadata: {labels: {app: smart-parking}}
+    spec:
+      containers:
+      - name: app
+        image: REPLACE_WITH_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/smart-parking:latest
+        imagePullPolicy: Always
+        ports: [{containerPort: 80}]
+        env:
+        - {name: DB_HOST, value: REPLACE_WITH_RDS_ENDPOINT}
+        - {name: DB_NAME, value: slot_booking}
+        - {name: DB_USER, value: admin}
+        - name: DB_PASSWORD
+          valueFrom: {secretKeyRef: {name: smart-parking-db, key: password}}
+        readinessProbe: {httpGet: {path: /health.php, port: 80}, initialDelaySeconds: 10, periodSeconds: 10}
+        livenessProbe: {httpGet: {path: /health.php, port: 80}, initialDelaySeconds: 30, periodSeconds: 20}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: smart-parking, namespace: smart-parking}
+spec:
+  selector: {app: smart-parking}
+  ports: [{port: 80, targetPort: 80}]
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: {name: smart-parking, namespace: smart-parking}
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: smart-parking}
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target: {type: Utilization, averageUtilization: 60}
