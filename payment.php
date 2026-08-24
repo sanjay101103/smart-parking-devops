@@ -15,13 +15,33 @@ $success = false;
 $error = "";
 $qr_id = "";
 
+/* DEBUG BOOKING POST */
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['pay'])) {
+    file_put_contents(
+        "/tmp/booking_post_debug.txt",
+        print_r($_POST, true)
+    );
+}
+
 /* STORE BOOKING */
-if($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['pay'])){
-    $_SESSION['booking'] = $_POST;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['pay'])) {
+
+    $_SESSION['booking'] = [
+        'location'   => $_POST['location'] ?? '',
+        'slot_id'    => $_POST['slot_id'] ?? '',
+        'vehicle_no' => $_POST['vehicle_no'] ?? '',
+        'from_date'  => $_POST['from_date'] ?? '',
+        'from_time'  => $_POST['from_time'] ?? '',
+        'to_date'    => $_POST['to_date'] ?? '',
+        'to_time'    => $_POST['to_time'] ?? '',
+        'days'       => $_POST['days'] ?? '',
+        'amount'     => $_POST['amount'] ?? ''
+    ];
 }
 
 /* SESSION CHECK */
-if(!isset($_SESSION['booking'])){
+if (!isset($_SESSION['booking']) || empty($_SESSION['booking']['slot_id'])) {
     header("Location: booking.php");
     exit();
 }
