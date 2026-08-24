@@ -1,11 +1,6 @@
-
 <?php
 include 'config.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-    $name = $_SESSION['name'] ?? '';
-}
 
 if(!isset($_SESSION['user_id'])){
     header("Location: user_login.php");
