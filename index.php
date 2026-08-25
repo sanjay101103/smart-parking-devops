@@ -482,7 +482,7 @@ function sendMessage() {
     var reply = "";
 
     if(text.includes("hi") || text.includes("hello"))
-        reply = "Hello! Welcome to Smart Parking.";
+        reply = "Hello!!!! Welcome to Smart Parking.";
     else if(text.includes("slot") || text.includes("available"))
         reply = "Available slots: <?php echo $available['available']; ?>";
     else if(text.includes("price"))
