@@ -11,7 +11,7 @@ $booked = $conn->query("SELECT COUNT(*) AS booked FROM slots WHERE status='booke
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
-<title>Smart Parking Slot Booking System With Aws and Devops Automation</title>
+<title>Smart Parking Slot Booking System </title>
 
 <style>
 *{
@@ -526,7 +526,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="hero-left">
 <h1>Book Your <span>Smart Parking Slot</span><br> Anytime, Anywhere</h1>
 
-<p>Real-time slot availability, Live Navigation, SMS alerts, Secure Payment and Auto Release System.</p>
+<p>Aws and Devops Automation, Real-time slot availability, Live Navigation, SMS alerts, Secure Payment and Auto Release System.</p>
 </div>
 
 <div class="hero-right">
