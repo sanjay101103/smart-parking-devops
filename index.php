@@ -1,6 +1,7 @@
-<?php include 'header.php'; ?>
 <?php
 include 'config.php';
+include 'header.php';
+
 
 $total = $conn->query("SELECT COUNT(*) AS total FROM slots")->fetch_assoc();
 $available = $conn->query("SELECT COUNT(*) AS available FROM slots WHERE status='available'")->fetch_assoc();
@@ -435,7 +436,7 @@ nav a:hover, .header a:hover{
 <html>
 <head>
     <title>Parking AI Chatbot</title>
-    
+
 </head>
 <body>
 <!-- Chat Icon -->
