@@ -4,8 +4,9 @@ pipeline {
     environment {
         AWS_REGION = 'ap-south-1'
         ECR_REPO = '861885769722.dkr.ecr.ap-south-1.amazonaws.com/smart-parking'
-        ECS_CLUSTER = 'smart-parking-cluster'
-        ECS_SERVICE = 'smart-parking-service'
+        EKS_CLUSTER = 'smart-parking-eks'
+        K8S_NAMESPACE = 'smart-parking'
+        K8S_DEPLOYMENT = 'smart-parking'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -47,25 +48,38 @@ pipeline {
             }
         }
 
-        stage('Deploy to ECS') {
+        stage('Configure EKS') {
             steps {
                 sh '''
-                    aws ecs update-service \
-                      --cluster $ECS_CLUSTER \
-                      --service $ECS_SERVICE \
-                      --force-new-deployment \
-                      --region $AWS_REGION
+                    aws eks update-kubeconfig \
+                      --region $AWS_REGION \
+                      --name $EKS_CLUSTER
                 '''
             }
         }
 
-        stage('Wait for ECS') {
+        stage('Deploy to EKS') {
             steps {
                 sh '''
-                    aws ecs wait services-stable \
-                      --cluster $ECS_CLUSTER \
-                      --services $ECS_SERVICE \
-                      --region $AWS_REGION
+                    kubectl set image deployment/$K8S_DEPLOYMENT \
+                      app=$ECR_REPO:$IMAGE_TAG \
+                      -n $K8S_NAMESPACE
+
+                    kubectl rollout status deployment/$K8S_DEPLOYMENT \
+                      -n $K8S_NAMESPACE \
+                      --timeout=5m
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                    kubectl get pods -n $K8S_NAMESPACE -o wide
+                    kubectl get deployment $K8S_DEPLOYMENT \
+                      -n $K8S_NAMESPACE \
+                      -o jsonpath='{.spec.template.spec.containers[0].image}'
+                    echo
                 '''
             }
         }
@@ -73,11 +87,11 @@ pipeline {
 
     post {
         success {
-            echo 'Smart Parking CI/CD deployment successful!'
+            echo 'Smart Parking EKS CI/CD deployment successful!'
         }
 
         failure {
-            echo 'Smart Parking CI/CD deployment failed!'
+            echo 'Smart Parking EKS CI/CD deployment failed!'
         }
     }
 }

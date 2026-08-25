@@ -13,11 +13,11 @@ spec:
     spec:
       containers:
       - name: app
-        image: REPLACE_WITH_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/smart-parking:latest
+        image: 861885769722.dkr.ecr.ap-south-1.amazonaws.com/smart-parking:latest
         imagePullPolicy: Always
         ports: [{containerPort: 80}]
         env:
-        - {name: DB_HOST, value: REPLACE_WITH_RDS_ENDPOINT}
+        - {name: DB_HOST, value: smart-parking-mysql.clei44oyomun.ap-south-1.rds.amazonaws.com}
         - {name: DB_NAME, value: slot_booking}
         - {name: DB_USER, value: admin}
         - name: DB_PASSWORD
