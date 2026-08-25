@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <!-- ABOUT -->
 <div id="about" class="section">
-<h2>About Smart Parking System</h2>
+<h2>About Smart Parking System with Aws Devops</h2>
 <p>
 Smart Parking Slot Booking System allows users to reserve parking spaces online.
 It provides real-time availability tracking, auto release after booking expiry,
