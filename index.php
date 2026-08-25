@@ -11,7 +11,7 @@ $booked = $conn->query("SELECT COUNT(*) AS booked FROM slots WHERE status='booke
 <html>
 <head>
     <link rel="stylesheet" href="style.css">
-<title>Smart Parking Slot Booking System</title>
+<title>Smart Parking Slot Booking System With Aws and Devops Automation</title>
 
 <style>
 *{
