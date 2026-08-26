@@ -565,7 +565,7 @@ Admins can manage users, slots, payments and bookings efficiently.
 
 <!-- FOOTER -->
 <div class="footer">
-© 2026 Smart Parking Slot Booking System | Final Year Project
+© 2026 Smart Parking Slot Booking System with aws devops |  Project
 </div>
 
 </body>
